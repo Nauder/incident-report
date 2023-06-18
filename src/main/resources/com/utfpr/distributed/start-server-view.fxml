@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="740.0" prefWidth="1020.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.utfpr.distributed.controller.ServerController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <children>
+         <Label text="Porta:">
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+         </Label>
+         <TextField fx:id="tPorta">
+            <HBox.margin>
+               <Insets right="30.0" />
+            </HBox.margin>
+         </TextField>
+         <Button mnemonicParsing="false" onAction="#onIniciar" text="Iniciar">
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+         </Button>
+         <Button mnemonicParsing="false" onAction="#onParar" text="Parar">
+            <HBox.margin>
+               <Insets left="10.0" />
+            </HBox.margin>
+         </Button>
+      </children>
+   </HBox>
+   <ScrollPane hbarPolicy="NEVER" prefHeight="574.0" prefWidth="980.0">
+      <content>
+         <Accordion fx:id="aLog" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="979.0" />
+      </content>
+   </ScrollPane>
+</VBox>

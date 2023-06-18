@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="233.0" prefWidth="492.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.utfpr.distributed.controller.IncidenteController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <Label fx:id="lErro" textFill="RED" />
+   <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="282.0">
+      <children>
+      
+          <Label text="Data">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <HBox.margin>
+               <Insets right="20.0" />
+            </HBox.margin>
+         </Label>
+         <DatePicker fx:id="dData" prefHeight="26.0" prefWidth="142.0" />
+         <Label text="Hora">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin></Label>
+         <TextField fx:id="tHora">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin>
+         </TextField>
+      </children>
+   </HBox>
+   <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="282.0">
+      <children>
+         <Label text="Estado" />
+         <TextField fx:id="tEstado" prefHeight="26.0" prefWidth="61.0">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin>
+         </TextField>
+         <Label text="Cidade">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin></Label>
+         <TextField fx:id="tCidade">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin>
+         </TextField>
+      </children>
+   </HBox>
+   <HBox prefHeight="25.0" prefWidth="601.0">
+      <children>
+         <Label text="Bairro" />
+         <TextField fx:id="tBairro">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin>
+         </TextField>
+         <Label text="Rua">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin></Label>
+         <TextField fx:id="tRua">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin>
+         </TextField>
+      </children>
+   </HBox>
+   <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="452.0">
+      <children>
+         <Label text="Tipo de Incidente" />
+         <ChoiceBox fx:id="cTipo" prefWidth="150.0">
+            <HBox.margin>
+               <Insets left="20.0" right="20.0" />
+            </HBox.margin>
+         </ChoiceBox>
+         <Button mnemonicParsing="false" onAction="#onReturnCreate" text="Voltar" />
+         <Button mnemonicParsing="false" onAction="#onSubmit" text="Enviar">
+            <HBox.margin>
+               <Insets left="20.0" />
+            </HBox.margin>
+         </Button>
+      </children>
+   </HBox>
+</VBox>
