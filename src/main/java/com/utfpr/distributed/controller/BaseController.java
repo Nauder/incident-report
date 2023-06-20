@@ -1,14 +1,20 @@
 package com.utfpr.distributed.controller;
 
 import com.utfpr.distributed.ClientApplication;
+import com.utfpr.distributed.util.TipoIncidente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class BaseController {
@@ -28,5 +34,25 @@ public abstract class BaseController {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected boolean areTextFieldsPopulated(TextField... fields) {
+
+        for(TextField field : fields) {
+            if(field.getText() == null || field.getText().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected boolean isDatePickerPopulated(DatePicker picker) {
+
+        return picker.getValue() != null && !picker.getValue().toString().isEmpty();
+    }
+
+    protected boolean isChoicePopulated(ChoiceBox<TipoIncidente> box) {
+
+        return box.getValue() != null;
     }
 }

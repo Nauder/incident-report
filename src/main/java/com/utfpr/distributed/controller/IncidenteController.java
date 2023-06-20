@@ -67,22 +67,28 @@ public class IncidenteController extends BaseController implements Initializable
     protected void onBuscarButtonClick(ActionEvent event) {
         final Map<String, Object> inputData = new HashMap<>();
 
-        inputData.put("operacao", 4);
-        inputData.put("data", dData.getValue().toString());
-        inputData.put("estado", tEstado.getText().toUpperCase());
-        inputData.put("cidade", tCidade.getText().toUpperCase());
+        if(areTextFieldsPopulated(tEstado, tCidade) && isDatePickerPopulated(dData)) {
 
-        JSONObject response = ClientSocketConnectionHandler.run(inputData);
+            inputData.put("operacao", 4);
+            inputData.put("data", dData.getValue().toString());
+            inputData.put("estado", tEstado.getText().toUpperCase());
+            inputData.put("cidade", tCidade.getText().toUpperCase());
 
-        if(response.query("/status") != "OK") {
-            lErro.setText((String) response.query("/status"));
-            lInfo.setText("");
+            JSONObject response = ClientSocketConnectionHandler.run(inputData);
+
+            if (response.query("/status") != "OK") {
+                lErro.setText((String) response.query("/status"));
+                lInfo.setText("");
+            } else {
+                tIncidentes.setItems(getList(response));
+                bEditar.setDisable(true);
+                bRemover.setDisable(true);
+                lInfo.setText("Incidentes buscados com sucesso");
+                lErro.setText("");
+            }
         } else {
-            tIncidentes.setItems(getList(response));
-            bEditar.setDisable(true);
-            bRemover.setDisable(true);
-            lInfo.setText("Incidentes buscados com sucesso");
-            lErro.setText("");
+            lErro.setText("Campo(s) obrigatóio(s) em branco");
+            lInfo.setText("");
         }
     }
 
@@ -115,6 +121,7 @@ public class IncidenteController extends BaseController implements Initializable
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
+
             final Map<String, Object> inputData = new HashMap<>();
 
             IncidenteRow row = tIncidentes.getSelectionModel().getSelectedItem();
@@ -135,24 +142,30 @@ public class IncidenteController extends BaseController implements Initializable
 
     @FXML
     protected void onSubmit(ActionEvent event) {
+        if(areTextFieldsPopulated(tHora, tEstado, tCidade, tBairro, tRua)
+                && isChoicePopulated(cTipo) && isDatePickerPopulated(dData)) {
 
-        final Map<String, Object> inputData = new HashMap<>();
-        inputData.put("operacao", 7);
-        inputData.put("data", dData.getValue().toString());
-        inputData.put("hora", tHora.getText());
-        inputData.put("estado", tEstado.getText().toUpperCase());
-        inputData.put("cidade", tCidade.getText().toUpperCase());
-        inputData.put("bairro", tBairro.getText().toUpperCase());
-        inputData.put("rua", tRua.getText().toUpperCase());
-        inputData.put("tipo", cTipo.getValue().getCodigo());
+            final Map<String, Object> inputData = new HashMap<>();
+            inputData.put("operacao", 7);
+            inputData.put("data", dData.getValue().toString());
+            inputData.put("hora", tHora.getText());
+            inputData.put("estado", tEstado.getText().toUpperCase());
+            inputData.put("cidade", tCidade.getText().toUpperCase());
+            inputData.put("bairro", tBairro.getText().toUpperCase());
+            inputData.put("rua", tRua.getText().toUpperCase());
+            inputData.put("tipo", cTipo.getValue().getCodigo());
 
-        JSONObject response = ClientSocketConnectionHandler.run(inputData);
-        if(response.query("/status") != "OK") {
-            lErro.setText((String) response.query("/status"));
-            lInfo.setText("");
+            JSONObject response = ClientSocketConnectionHandler.run(inputData);
+            if (response.query("/status") != "OK") {
+                lErro.setText((String) response.query("/status"));
+                lInfo.setText("");
+            } else {
+                lInfo.setText("Incidente cadastrado com sucesso");
+                lErro.setText("");
+            }
         } else {
-            lInfo.setText("Incidente cadastrado com sucesso");
-            lErro.setText("");
+            lErro.setText("Campo(s) obrigatóio(s) em branco");
+            lInfo.setText("");
         }
     }
 
@@ -168,18 +181,15 @@ public class IncidenteController extends BaseController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         if(this.tIncidentes != null) {
             initializeTable();
         }
-
         if(this.cTipo != null) {
             initializeChoiceBox();
         }
     }
 
     private ObservableList<IncidenteRow> getList(JSONObject response) {
-
         List<IncidenteRow> incidentes = new ArrayList<>();
 
         response.getJSONArray("incidentes").toList().forEach(((entry) -> {
@@ -201,7 +211,6 @@ public class IncidenteController extends BaseController implements Initializable
     }
 
     private void initializeTable() {
-
         TableColumn<IncidenteRow, Integer> idCol = new TableColumn<>("#");
         TableColumn<IncidenteRow, String> dataCol = new TableColumn<>("Data");
         TableColumn<IncidenteRow, String> horaCol = new TableColumn<>("Hora");

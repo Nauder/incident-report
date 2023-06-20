@@ -28,19 +28,23 @@ public class UsuarioController extends BaseController implements Initializable {
     @FXML
     protected void onUpdateSubmit(ActionEvent event) {
 
-        final Map<String, Object> inputData = new HashMap<>();
+        if(areTextFieldsPopulated(tNome, tEmail, tSenha)) {
+            final Map<String, Object> inputData = new HashMap<>();
 
-        inputData.put("operacao", 3);
-        inputData.put("nome", tNome.getText());
-        inputData.put("email", tEmail.getText());
-        inputData.put("senha", tSenha.getText());
+            inputData.put("operacao", 3);
+            inputData.put("nome", tNome.getText());
+            inputData.put("email", tEmail.getText());
+            inputData.put("senha", tSenha.getText());
 
-        JSONObject response = ClientSocketConnectionHandler.run(inputData);
+            JSONObject response = ClientSocketConnectionHandler.run(inputData);
 
-        if(response.query("/status") != "OK") {
-            lErro.setText((String) response.query("/status"));
+            if (response.query("/status") != "OK") {
+                lErro.setText((String) response.query("/status"));
+            } else {
+                openNewWindow(event, "login-view.fxml", "login");
+            }
         } else {
-            openNewWindow(event, "login-view.fxml", "login");
+            lErro.setText("Campo(s) obrigatóio(s) em branco");
         }
     }
 

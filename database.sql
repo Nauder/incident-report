@@ -21,5 +21,5 @@ ALTER TABLE public.incidente
 ADD CONSTRAINT fk_user_incidente
 FOREIGN KEY(id_user)
 REFERENCES public.user(id_user)
-ON DELETE CASCADE
+ON DELETE SET NULL
 ON UPDATE CASCADE;
