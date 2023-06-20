@@ -20,6 +20,8 @@ public class IncidenteController extends BaseController implements Initializable
     @FXML
     private Label lErro;
     @FXML
+    private Label lInfo;
+    @FXML
     private TableView<IncidenteRow> tIncidentes;
     @FXML
     private ChoiceBox<TipoIncidente> cTipo;
@@ -74,10 +76,13 @@ public class IncidenteController extends BaseController implements Initializable
 
         if(response.query("/status") != "OK") {
             lErro.setText((String) response.query("/status"));
+            lInfo.setText("");
         } else {
             tIncidentes.setItems(getList(response));
             bEditar.setDisable(true);
             bRemover.setDisable(true);
+            lInfo.setText("Incidentes buscados com sucesso");
+            lErro.setText("");
         }
     }
 
@@ -91,10 +96,13 @@ public class IncidenteController extends BaseController implements Initializable
 
         if(response.query("/status") != "OK") {
             lErro.setText((String) response.query("/status"));
+            lInfo.setText("");
         } else {
             tIncidentes.setItems(getList(response));
             bEditar.setDisable(false);
             bRemover.setDisable(false);
+            lInfo.setText("Meus incidentes buscados com sucesso");
+            lErro.setText("");
         }
     }
 
@@ -118,6 +126,7 @@ public class IncidenteController extends BaseController implements Initializable
 
             if(response.query("/status") != "OK") {
                 lErro.setText((String) response.query("/status"));
+                lInfo.setText("");
             } else {
                 onBuscarMeusButtonClick(event);
             }
@@ -140,6 +149,10 @@ public class IncidenteController extends BaseController implements Initializable
         JSONObject response = ClientSocketConnectionHandler.run(inputData);
         if(response.query("/status") != "OK") {
             lErro.setText((String) response.query("/status"));
+            lInfo.setText("");
+        } else {
+            lInfo.setText("Incidente cadastrado com sucesso");
+            lErro.setText("");
         }
     }
 

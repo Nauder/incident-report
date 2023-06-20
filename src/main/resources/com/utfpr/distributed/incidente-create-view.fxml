@@ -9,11 +9,21 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <Label fx:id="lErro" textFill="RED" />
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <children>
+         <Label fx:id="lErro" textFill="RED" />
+         <Label fx:id="lInfo" textFill="#248a25" />
+      </children>
+   </HBox>
+   <Label text="*Obrigatório">
+      <font>
+         <Font size="11.0" />
+      </font>
+   </Label>
    <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="282.0">
       <children>
       
-          <Label text="Data">
+          <Label text="*Data">
             <font>
                <Font size="14.0" />
             </font>
@@ -22,7 +32,7 @@
             </HBox.margin>
          </Label>
          <DatePicker fx:id="dData" prefHeight="26.0" prefWidth="142.0" />
-         <Label text="Hora">
+         <Label text="*Hora">
             <HBox.margin>
                <Insets left="20.0" />
             </HBox.margin></Label>
@@ -35,13 +45,13 @@
    </HBox>
    <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="282.0">
       <children>
-         <Label text="Estado" />
+         <Label text="*Estado" />
          <TextField fx:id="tEstado" prefHeight="26.0" prefWidth="61.0">
             <HBox.margin>
                <Insets left="20.0" />
             </HBox.margin>
          </TextField>
-         <Label text="Cidade">
+         <Label text="*Cidade">
             <HBox.margin>
                <Insets left="20.0" />
             </HBox.margin></Label>
@@ -54,17 +64,17 @@
    </HBox>
    <HBox prefHeight="25.0" prefWidth="601.0">
       <children>
-         <Label text="Bairro" />
+         <Label text="*Bairro" />
          <TextField fx:id="tBairro">
             <HBox.margin>
                <Insets left="20.0" />
             </HBox.margin>
          </TextField>
-         <Label text="Rua">
+         <Label text="*Rua">
             <HBox.margin>
                <Insets left="20.0" />
             </HBox.margin></Label>
-         <TextField fx:id="tRua">
+         <TextField fx:id="tRua" prefHeight="26.0" prefWidth="148.0">
             <HBox.margin>
                <Insets left="20.0" />
             </HBox.margin>
@@ -73,7 +83,7 @@
    </HBox>
    <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="452.0">
       <children>
-         <Label text="Tipo de Incidente" />
+         <Label text="*Tipo de Incidente" />
          <ChoiceBox fx:id="cTipo" prefWidth="150.0">
             <HBox.margin>
                <Insets left="20.0" right="20.0" />

@@ -9,14 +9,19 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
+   <Label text="*Obrigatório">
+      <font>
+         <Font size="11.0" />
+      </font>
+   </Label>
 
-    <Label fx:id="welcomeText" text="Endereço">
+    <Label fx:id="welcomeText" text="*Endereço">
       <font>
          <Font size="14.0" />
       </font>
    </Label>
    <TextField fx:id="tEndereco" />
-   <Label text="Porta" />
+   <Label text="*Porta" />
    <TextField fx:id="tPorta" />
    <Button mnemonicParsing="false" onAction="#onConectarSubmit" text="Enviar" />
 </VBox>
