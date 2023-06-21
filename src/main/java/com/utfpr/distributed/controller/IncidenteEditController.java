@@ -1,7 +1,6 @@
 package com.utfpr.distributed.controller;
 
 import com.utfpr.distributed.model.Incidente;
-import com.utfpr.distributed.model.IncidenteRow;
 import com.utfpr.distributed.util.TipoIncidente;
 import com.utfpr.distributed.util.socket.ClientSocketConnectionHandler;
 import javafx.collections.FXCollections;

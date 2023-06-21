@@ -4,7 +4,6 @@ import com.utfpr.distributed.database.UserDataAccess;
 import com.utfpr.distributed.model.User;
 import com.utfpr.distributed.util.ClientSession;
 import com.utfpr.distributed.util.EncryptionHelper;
-import com.utfpr.distributed.util.InputManager;
 import com.utfpr.distributed.util.token.ServerTokenManager;
 import com.utfpr.distributed.util.token.TokenManager;
 import com.utfpr.distributed.validation.UserValidator;

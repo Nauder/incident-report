@@ -32,9 +32,21 @@
          </Button>
       </children>
    </HBox>
-   <ScrollPane hbarPolicy="NEVER" prefHeight="574.0" prefWidth="980.0">
-      <content>
-         <Accordion fx:id="aLog" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="979.0" />
-      </content>
-   </ScrollPane>
+   <HBox alignment="CENTER" prefHeight="570.0" prefWidth="200.0">
+      <children>
+         <ScrollPane hbarPolicy="NEVER" prefHeight="574.0">
+            <content>
+               <Accordion fx:id="aLog" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="480.0" />
+            </content>
+            <padding>
+               <Insets right="10.0" />
+            </padding>
+         </ScrollPane>
+         <ScrollPane prefWidth="480.0">
+            <content>
+               <TableView fx:id="tLogins" prefHeight="567.0" prefWidth="476.0" />
+            </content>
+         </ScrollPane>
+      </children>
+   </HBox>
 </VBox>

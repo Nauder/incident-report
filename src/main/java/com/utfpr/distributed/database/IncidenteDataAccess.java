@@ -11,7 +11,7 @@ import java.util.List;
 
 public final class IncidenteDataAccess extends BaseDataAccess {
 
-    protected IncidenteDataAccess() {
+    public IncidenteDataAccess() {
         super("incidente");
     }
 

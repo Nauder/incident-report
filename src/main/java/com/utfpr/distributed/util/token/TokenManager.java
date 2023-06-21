@@ -1,5 +1,7 @@
 package com.utfpr.distributed.util.token;
 
+import com.utfpr.distributed.controller.ServerController;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ public abstract class TokenManager {
     public static void deleteToken(Integer id) {
 
         TOKENS.remove(id);
+        ServerController.refreshLogins();
     }
 
     public static Map<Integer, String> getTokens() {

@@ -1,6 +1,5 @@
 package com.utfpr.distributed.controller;
 
-import com.utfpr.distributed.ClientApplication;
 import com.utfpr.distributed.util.socket.ClientSocketConnectionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

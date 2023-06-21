@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS public.user (
 
 CREATE TABLE IF NOT EXISTS public.incidente (
     id_incidente serial PRIMARY KEY,
-    id_user integer NOT NULL,
+    id_user integer,
     data character varying NOT NULL,
     hora character varying NOT NULL,
     estado character(2) NOT NULL,

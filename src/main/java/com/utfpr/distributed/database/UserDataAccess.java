@@ -168,4 +168,37 @@ public final class UserDataAccess extends BaseDataAccess {
             e.printStackTrace();
         }
     }
+
+    public static User getById(Integer id) {
+
+        final String QUERY = "SELECT * FROM public.user WHERE id_user = ?;";
+
+        try (PreparedStatement pst = getCon().prepareStatement(QUERY)) {
+
+            pst.setInt(1, id);
+
+            final ResultSet rs = pst.executeQuery();
+
+            if (isResultSetEmpty(rs)) {
+
+                return null;
+            } else {
+
+                while (rs.next()) {
+                    return new User(
+                            rs.getInt("id_user"),
+                            rs.getString("nome"),
+                            rs.getString("email"),
+                            rs.getString("senha")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
