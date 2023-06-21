@@ -2,6 +2,7 @@ package com.utfpr.distributed.controller;
 
 import com.utfpr.distributed.util.ClientSession;
 import com.utfpr.distributed.util.socket.ClientSocketConnectionHandler;
+import com.utfpr.distributed.validation.UserValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,20 +29,22 @@ public class UsuarioController extends BaseController implements Initializable {
     @FXML
     protected void onUpdateSubmit(ActionEvent event) {
 
-        if(areTextFieldsPopulated(tNome, tEmail, tSenha)) {
-            final Map<String, Object> inputData = new HashMap<>();
+        if (areTextFieldsPopulated(tNome, tEmail, tSenha)) {
+            if (validateFields()) {
+                final Map<String, Object> inputData = new HashMap<>();
 
-            inputData.put("operacao", 3);
-            inputData.put("nome", tNome.getText());
-            inputData.put("email", tEmail.getText());
-            inputData.put("senha", tSenha.getText());
+                inputData.put("operacao", 3);
+                inputData.put("nome", tNome.getText());
+                inputData.put("email", tEmail.getText());
+                inputData.put("senha", tSenha.getText());
 
-            JSONObject response = ClientSocketConnectionHandler.run(inputData);
+                JSONObject response = ClientSocketConnectionHandler.run(inputData);
 
-            if (response.query("/status") != "OK") {
-                lErro.setText((String) response.query("/status"));
-            } else {
-                openNewWindow(event, "login-view.fxml", "login");
+                if (response.query("/status") != "OK") {
+                    lErro.setText((String) response.query("/status"));
+                } else {
+                    openNewWindow(event, "login-view.fxml", "login");
+                }
             }
         } else {
             lErro.setText("Campo(s) obrigatóio(s) em branco");
@@ -49,7 +52,7 @@ public class UsuarioController extends BaseController implements Initializable {
     }
 
     @FXML
-    protected  void onCancel(ActionEvent event) {
+    protected void onCancel(ActionEvent event) {
         openNewWindow(event, "operacao-menu-view.fxml", "menu");
     }
 
@@ -58,5 +61,20 @@ public class UsuarioController extends BaseController implements Initializable {
         tNome.setText(ClientSession.getNome());
         tEmail.setText(ClientSession.getEmail());
         tSenha.setText(ClientSession.getSenha());
+    }
+
+    private boolean validateFields() {
+
+        if (!UserValidator.checkEmail(tEmail.getText())) {
+            lErro.setText("Formato de e-mail inválido");
+        } else if (!UserValidator.checkName(tNome.getText())) {
+            lErro.setText("Formato de nome inválido");
+        } else if (!UserValidator.checkPassword(tSenha.getText())) {
+            lErro.setText("Formato de senha inválido");
+        } else {
+            return true;
+        }
+
+        return false;
     }
 }

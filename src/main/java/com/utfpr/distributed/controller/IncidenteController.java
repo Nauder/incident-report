@@ -4,6 +4,7 @@ import com.utfpr.distributed.model.Incidente;
 import com.utfpr.distributed.model.IncidenteRow;
 import com.utfpr.distributed.util.TipoIncidente;
 import com.utfpr.distributed.util.socket.ClientSocketConnectionHandler;
+import com.utfpr.distributed.validation.IncidenteValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,24 +68,25 @@ public class IncidenteController extends BaseController implements Initializable
     protected void onBuscarButtonClick(ActionEvent event) {
         final Map<String, Object> inputData = new HashMap<>();
 
-        if(areTextFieldsPopulated(tEstado, tCidade) && isDatePickerPopulated(dData)) {
+        if (areTextFieldsPopulated(tEstado, tCidade) && isDatePickerPopulated(dData)) {
+            if (validateSearchFields()) {
+                inputData.put("operacao", 4);
+                inputData.put("data", dData.getValue().toString());
+                inputData.put("estado", tEstado.getText().toUpperCase());
+                inputData.put("cidade", tCidade.getText().toUpperCase());
 
-            inputData.put("operacao", 4);
-            inputData.put("data", dData.getValue().toString());
-            inputData.put("estado", tEstado.getText().toUpperCase());
-            inputData.put("cidade", tCidade.getText().toUpperCase());
+                JSONObject response = ClientSocketConnectionHandler.run(inputData);
 
-            JSONObject response = ClientSocketConnectionHandler.run(inputData);
-
-            if (response.query("/status") != "OK") {
-                lErro.setText((String) response.query("/status"));
-                lInfo.setText("");
-            } else {
-                tIncidentes.setItems(getList(response));
-                bEditar.setDisable(true);
-                bRemover.setDisable(true);
-                lInfo.setText("Incidentes buscados com sucesso");
-                lErro.setText("");
+                if (response.query("/status") != "OK") {
+                    lErro.setText((String) response.query("/status"));
+                    lInfo.setText("");
+                } else {
+                    tIncidentes.setItems(getList(response));
+                    bEditar.setDisable(true);
+                    bRemover.setDisable(true);
+                    lInfo.setText("Incidentes buscados com sucesso");
+                    lErro.setText("");
+                }
             }
         } else {
             lErro.setText("Campo(s) obrigatóio(s) em branco");
@@ -100,7 +102,7 @@ public class IncidenteController extends BaseController implements Initializable
 
         JSONObject response = ClientSocketConnectionHandler.run(inputData);
 
-        if(response.query("/status") != "OK") {
+        if (response.query("/status") != "OK") {
             lErro.setText((String) response.query("/status"));
             lInfo.setText("");
         } else {
@@ -120,7 +122,7 @@ public class IncidenteController extends BaseController implements Initializable
         alert.setContentText("Tem certeza que deseja continuar?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
 
             final Map<String, Object> inputData = new HashMap<>();
 
@@ -131,7 +133,7 @@ public class IncidenteController extends BaseController implements Initializable
 
             JSONObject response = ClientSocketConnectionHandler.run(inputData);
 
-            if(response.query("/status") != "OK") {
+            if (response.query("/status") != "OK") {
                 lErro.setText((String) response.query("/status"));
                 lInfo.setText("");
             } else {
@@ -142,26 +144,28 @@ public class IncidenteController extends BaseController implements Initializable
 
     @FXML
     protected void onSubmit(ActionEvent event) {
-        if(areTextFieldsPopulated(tHora, tEstado, tCidade, tBairro, tRua)
+        if (areTextFieldsPopulated(tHora, tEstado, tCidade, tBairro, tRua)
                 && isChoicePopulated(cTipo) && isDatePickerPopulated(dData)) {
+            if (validateSubmitFields()) {
 
-            final Map<String, Object> inputData = new HashMap<>();
-            inputData.put("operacao", 7);
-            inputData.put("data", dData.getValue().toString());
-            inputData.put("hora", tHora.getText());
-            inputData.put("estado", tEstado.getText().toUpperCase());
-            inputData.put("cidade", tCidade.getText().toUpperCase());
-            inputData.put("bairro", tBairro.getText().toUpperCase());
-            inputData.put("rua", tRua.getText().toUpperCase());
-            inputData.put("tipo", cTipo.getValue().getCodigo());
+                final Map<String, Object> inputData = new HashMap<>();
+                inputData.put("operacao", 7);
+                inputData.put("data", dData.getValue().toString());
+                inputData.put("hora", tHora.getText());
+                inputData.put("estado", tEstado.getText().toUpperCase());
+                inputData.put("cidade", tCidade.getText().toUpperCase());
+                inputData.put("bairro", tBairro.getText().toUpperCase());
+                inputData.put("rua", tRua.getText().toUpperCase());
+                inputData.put("tipo", cTipo.getValue().getCodigo());
 
-            JSONObject response = ClientSocketConnectionHandler.run(inputData);
-            if (response.query("/status") != "OK") {
-                lErro.setText((String) response.query("/status"));
-                lInfo.setText("");
-            } else {
-                lInfo.setText("Incidente cadastrado com sucesso");
-                lErro.setText("");
+                JSONObject response = ClientSocketConnectionHandler.run(inputData);
+                if (response.query("/status") != "OK") {
+                    lErro.setText((String) response.query("/status"));
+                    lInfo.setText("");
+                } else {
+                    lInfo.setText("Incidente cadastrado com sucesso");
+                    lErro.setText("");
+                }
             }
         } else {
             lErro.setText("Campo(s) obrigatóio(s) em branco");
@@ -179,14 +183,40 @@ public class IncidenteController extends BaseController implements Initializable
         openNewWindow(event, "operacao-menu-view.fxml", "menu");
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        if(this.tIncidentes != null) {
-            initializeTable();
+    private boolean validateSubmitFields() {
+
+        if (!IncidenteValidator.checkData(dData.getValue().toString())) {
+            lErro.setText("Formato de data inválido");
+        } else if (!IncidenteValidator.checkEstado(tEstado.getText())) {
+            lErro.setText("Formato de estado inválido");
+        } else if (!IncidenteValidator.checkHora(tHora.getText())) {
+            lErro.setText("Formato de hora inválido");
+        } else if (!IncidenteValidator.checkLocal(tBairro.getText())) {
+            lErro.setText("Formato de bairro inválido");
+        } else if (!IncidenteValidator.checkLocal(tRua.getText())) {
+            lErro.setText("Formato de rua inválido");
+        } else if (!IncidenteValidator.checkLocal(tCidade.getText())) {
+            lErro.setText("Formato de cidade inválido");
+        } else {
+            return true;
         }
-        if(this.cTipo != null) {
-            initializeChoiceBox();
+
+        return false;
+    }
+
+    private boolean validateSearchFields() {
+
+        if (!IncidenteValidator.checkData(dData.getValue().toString())) {
+            lErro.setText("Formato de data inválido");
+        } else if (!IncidenteValidator.checkEstado(tEstado.getText())) {
+            lErro.setText("Formato de estado inválido");
+        } else if (!IncidenteValidator.checkLocal(tCidade.getText())) {
+            lErro.setText("Formato de cidade inválido");
+        } else {
+            return true;
         }
+
+        return false;
     }
 
     private ObservableList<IncidenteRow> getList(JSONObject response) {
@@ -243,5 +273,15 @@ public class IncidenteController extends BaseController implements Initializable
 
     private void initializeChoiceBox() {
         cTipo.setItems(FXCollections.observableList(Arrays.stream(TipoIncidente.values()).toList()));
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (this.tIncidentes != null) {
+            initializeTable();
+        }
+        if (this.cTipo != null) {
+            initializeChoiceBox();
+        }
     }
 }

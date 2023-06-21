@@ -8,13 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 public abstract class BaseController {
@@ -52,7 +50,7 @@ public abstract class BaseController {
     }
 
     protected boolean isChoicePopulated(ChoiceBox<TipoIncidente> box) {
-
+	
         return box.getValue() != null;
     }
 }
