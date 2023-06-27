@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
@@ -39,7 +40,7 @@ public class ServerController extends BaseController implements Initializable {
     protected void onIniciar(ActionEvent event) {
         new Thread(new ServerSocketConnectionHandler(Integer.parseInt(tPorta.getText()))).start();
         try {
-            updateLog("Servidor ouvindo em: " + InetAddress.getLocalHost() + ":" + tPorta.getText());
+            updateLog("Servidor ouvindo em: " + InetAddress.getLocalHost() + ":" + tPorta.getText(), "servidor iniciado:");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -51,7 +52,7 @@ public class ServerController extends BaseController implements Initializable {
         System.exit(1);
     }
 
-    private static void updateLog(String data) {
+    private static void updateLog(String data, String title) {
 
         Platform.runLater(() -> {
             TitledPane pane = new TitledPane();
@@ -61,7 +62,7 @@ public class ServerController extends BaseController implements Initializable {
             box.setAlignment(Pos.CENTER_LEFT);
             content.setAlignment(Pos.CENTER_LEFT);
             content.setText(data);
-            pane.setText(StringUtil.ellipsize(data, 11));
+            pane.setText(title);
             pane.setContent(box);
             pane.setAlignment(Pos.CENTER_LEFT);
 
@@ -71,12 +72,27 @@ public class ServerController extends BaseController implements Initializable {
 
     public static void appendReceived(String message) {
 
-        updateLog("Recebido:\n" + new JSONObject(message).toString(2));
+        if(message != null) {
+            try {
+                final JSONObject json = new JSONObject(message);
+                updateLog(json.toString(2),
+                        json.has("id") ? "recebido de " + json.getInt("id") + ":" : "recebido:");
+            } catch (Exception e) {
+                System.out.println("Erro ao montar log: " + e.getMessage());
+            }
+        }
     }
 
-    public static void appendSent(String message) {
+    public static void appendSent(String message, Integer id) {
 
-        updateLog("Enviado:\n" + new JSONObject(message).toString(2));
+        if(message != null) {
+            try {
+                updateLog(new JSONObject(message).toString(2),
+                        id != -1 ? "enviado para " + id + ":" : "enviado:");
+            } catch (Exception e) {
+                System.out.println("Erro ao montar log: " + e.getMessage());
+            }
+        }
     }
 
     @Override

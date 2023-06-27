@@ -2,6 +2,7 @@ package com.utfpr.distributed.util.socket;
 
 import com.utfpr.distributed.controller.ServerController;
 import com.utfpr.distributed.util.Gateway;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public final class ServerSocketConnectionHandler implements Runnable {
             LOGGER.log(Level.INFO, "Enviado: {0}", outgoingMessage);
 
             ServerController.appendReceived(incomingMessage);
-            ServerController.appendSent(outgoingMessage);
+            ServerController.appendSent(outgoingMessage, getIdFromJSON(incomingMessage));
 
             out.println(outgoingMessage);
 
@@ -75,5 +76,18 @@ public final class ServerSocketConnectionHandler implements Runnable {
             LOGGER.log(Level.SEVERE, "Problema com o Servidor de Comunicação.");
             System.exit(1);
         }
+    }
+
+    private Integer getIdFromJSON(String rawJson) {
+        try {
+            JSONObject json = new JSONObject(rawJson);
+            if(json.has("id")) {
+                return json.getInt("id");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao obter id: " + e.getMessage());
+        }
+
+        return -1;
     }
 }
